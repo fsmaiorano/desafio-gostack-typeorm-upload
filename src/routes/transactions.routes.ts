@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateTransactionService from '../services/CreateTransactionService';
+import GetBalanceTransactionService from '../services/GetBalanceTransactionService';
 // import DeleteTransactionService from '../services/DeleteTransactionService';
 // import ImportTransactionsService from '../services/ImportTransactionsService';
 
@@ -11,7 +12,12 @@ const transactionsRouter = Router();
 transactionsRouter.get('/', async (request, response) => {
   const transactionsRepository = getCustomRepository(TransactionsRepository);
   const transactions = await transactionsRepository.find();
-  return response.json(transactions);
+
+  const balance = new GetBalanceTransactionService().execute(transactions);
+
+  const result = { transactions, balance };
+
+  return response.json(result);
 });
 
 transactionsRouter.post('/', async (request, response) => {

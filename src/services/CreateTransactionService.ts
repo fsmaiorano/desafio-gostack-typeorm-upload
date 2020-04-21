@@ -17,7 +17,6 @@ class CreateTransactionService {
     const transactionRepository = getRepository(Transaction);
 
     const createCategoryService = new CreateCategoryService();
-
     var selectedCategory = await createCategoryService.execute({ title: category });
 
     const transaction = transactionRepository.create({ title, value, type, category_id: selectedCategory.id });
