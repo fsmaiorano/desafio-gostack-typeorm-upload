@@ -1,18 +1,10 @@
 import AppError from '../errors/AppError';
 import Transaction from '../models/Transaction';
-import TransactionRepository from '../repositories/TransactionsRepository';
 import TransactionsRepository from '../repositories/TransactionsRepository';
-import { getRepository } from 'typeorm';
-
-interface Request {
-  title: string;
-  value: number;
-  type: string;
-  category: string;
-}
+import { getRepository, getCustomRepository } from 'typeorm';
 
 class CreateTransactionService {
-  public async execute({ title, value, type, category }: Request): Promise<Transaction> {
+  public async execute({ title, value, type, category }: Transaction): Promise<Transaction> {
     // var balance = this.transactionsRepository.getBalance();
 
     // if (
@@ -24,7 +16,9 @@ class CreateTransactionService {
 
     const transactionRepository = getRepository(Transaction);
 
-    const transaction = await transactionRepository.create({ title, value, type, category });
+    const transaction = transactionRepository.create({ title, value, type, category });
+
+    await transactionRepository.save(transaction);
 
     return transaction;
   }
