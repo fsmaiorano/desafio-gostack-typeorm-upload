@@ -8,10 +8,11 @@ interface Request {
   title: string;
   value: number;
   type: string;
+  category: string;
 }
 
 class CreateTransactionService {
-  public async execute({ title, value, type }: Request): Promise<Transaction> {
+  public async execute({ title, value, type, category }: Request): Promise<Transaction> {
     // var balance = this.transactionsRepository.getBalance();
 
     // if (
@@ -23,7 +24,7 @@ class CreateTransactionService {
 
     const transactionRepository = getRepository(Transaction);
 
-    const transaction = transactionRepository.create({ title, value, type });
+    const transaction = await transactionRepository.create({ title, value, type, category });
 
     return transaction;
   }
