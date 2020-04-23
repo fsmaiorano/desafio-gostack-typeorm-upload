@@ -10,6 +10,10 @@ class GetBalanceTransactionService {
   }
 
   public execute(transactions: Transaction[]): Balance {
+    if (transactions.length === 0) {
+      return this.balance;
+    }
+
     var income = transactions
       .filter(x => x.type === 'income')
       .map(y => y.value)

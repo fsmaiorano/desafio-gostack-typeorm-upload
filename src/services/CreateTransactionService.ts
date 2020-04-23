@@ -18,6 +18,8 @@ class CreateTransactionService {
 
     await transactionRepository.save(transaction);
 
+    delete transaction.category;
+
     return transaction;
   }
 }
