@@ -1,12 +1,6 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  TableForeignKey,
-  TableColumn,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, TableForeignKey, TableColumn } from 'typeorm';
 
-export class CreateFKTransactionsCategory1587453044575
-  implements MigrationInterface {
+export class CreateFKTransactionsCategory1587453044575 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.createForeignKey(
       'transactions',
@@ -14,7 +8,7 @@ export class CreateFKTransactionsCategory1587453044575
         name: 'TransactionCategory',
         columnNames: ['category_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'categorys',
+        referencedTableName: 'categories',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),
@@ -22,6 +16,6 @@ export class CreateFKTransactionsCategory1587453044575
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
-    await queryRunner.dropForeignKey('categorys', 'TransactionCategory');
+    await queryRunner.dropForeignKey('categories', 'TransactionCategory');
   }
 }

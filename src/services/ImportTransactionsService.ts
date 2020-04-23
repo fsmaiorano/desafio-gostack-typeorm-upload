@@ -1,12 +1,12 @@
 import Transaction from '../models/Transaction';
 import CreateTransactionService from './CreateTransactionService';
-import CreateCategoryService from './CreateCategoryService';
+import Createcategorieservice from './CreateCategoriesService';
 
 class ImportTransactionsService {
   async execute(loadCsv: string[]): Promise<Transaction[]> {
     var transactions = new Array<Transaction>();
     var createTransactionService = new CreateTransactionService();
-    var createCategoryService = new CreateCategoryService();
+    var createcategorieservice = new Createcategorieservice();
 
     await Promise.all(
       loadCsv.map(async function map(t) {
@@ -17,7 +17,7 @@ class ImportTransactionsService {
         transaction.value = parseInt(t[2]);
         transaction.category_id = t[3].trim();
 
-        var category = await createCategoryService.execute(transaction.category_id);
+        var category = await createcategorieservice.execute(transaction.category_id);
         transaction.category = category;
         await createTransactionService.execute(transaction);
 

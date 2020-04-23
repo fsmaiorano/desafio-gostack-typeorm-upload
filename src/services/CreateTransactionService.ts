@@ -1,5 +1,5 @@
 import Transaction from '../models/Transaction';
-import CreateCategoryService from '../services/CreateCategoryService';
+import Createcategorieservice from '../services/CreateCategoriesService';
 import { getRepository } from 'typeorm';
 import Category from '../models/Category';
 
@@ -17,8 +17,6 @@ class CreateTransactionService {
     const transaction = transactionRepository.create({ title, value, type, category });
 
     await transactionRepository.save(transaction);
-
-    delete transaction.category;
 
     return transaction;
   }
