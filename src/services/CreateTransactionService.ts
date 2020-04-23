@@ -2,6 +2,8 @@ import Transaction from '../models/Transaction';
 import Createcategorieservice from '../services/CreateCategoriesService';
 import { getRepository } from 'typeorm';
 import Category from '../models/Category';
+import GetBalanceTransactionService from './GetBalanceTransactionService';
+import AppError from '../errors/AppError';
 
 interface Request {
   title: string;
@@ -13,6 +15,12 @@ interface Request {
 class CreateTransactionService {
   public async execute({ title, value, type, category }: Request): Promise<Transaction> {
     const transactionRepository = getRepository(Transaction);
+
+    const currentBalance = new GetBalanceTransactionService().balance;
+
+    if (type === 'outcome' && currentBalance.income < value) {
+      throw new AppError('No money available');
+    }
 
     const transaction = transactionRepository.create({ title, value, type, category });
 

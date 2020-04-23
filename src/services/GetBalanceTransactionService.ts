@@ -3,7 +3,7 @@ import Transaction from '../models/Transaction';
 import Balance from '../models/Balance';
 
 class GetBalanceTransactionService {
-  private balance: Balance;
+  public balance: Balance;
 
   constructor() {
     this.balance = { income: 0, outcome: 0, total: 0 };
