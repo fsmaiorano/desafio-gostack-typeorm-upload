@@ -13,6 +13,10 @@ class TransactionsRepository extends Repository<Transaction> {
     this.balance = { income: 0, outcome: 0, total: 0 };
   }
 
+  public async setBalance(transactions: Transaction[]) {
+    this.getBalance(transactions);
+  }
+
   public async getBalance(transactions: Transaction[]): Promise<Balance> {
     var income = transactions
       .filter(x => x.type === 'income')

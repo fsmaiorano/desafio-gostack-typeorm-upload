@@ -1,9 +1,10 @@
 import Transaction from '../models/Transaction';
 import Createcategorieservice from '../services/CreateCategoriesService';
-import { getRepository, TransactionRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import Category from '../models/Category';
 import GetBalanceTransactionService from './GetBalanceTransactionService';
 import AppError from '../errors/AppError';
+import TransactionsRepository from '../repositories/TransactionsRepository';
 
 interface Request {
   title: string;
@@ -19,13 +20,18 @@ class CreateTransactionService {
     const getBalanceTransactionService = new GetBalanceTransactionService();
     const currentBalance = await getBalanceTransactionService.execute(transactions);
 
-    if (type === 'outcome' && currentBalance.income < value) {
+    if (type === 'outcome' && currentBalance.total < value) {
       throw new AppError('No money available');
     }
 
     const transaction = transactionRepository.create({ title, value, type, category });
 
     await transactionRepository.save(transaction);
+
+    transactions.push(transaction);
+
+    const tr = new TransactionsRepository();
+    tr.setBalance(transactions);
 
     return transaction;
   }
