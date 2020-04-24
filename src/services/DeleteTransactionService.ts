@@ -3,7 +3,7 @@ import Transaction from '../models/Transaction';
 import AppError from '../errors/AppError';
 
 class DeleteTransactionService {
-  public async execute(id: string): Promise<void> {
+  public async execute(id: string): Promise<Boolean> {
     const transactionRepository = getRepository(Transaction);
     const transaction = await transactionRepository.findOne({ where: { id } });
 
@@ -11,7 +11,9 @@ class DeleteTransactionService {
       throw new AppError('Transaction not found', 500);
     }
 
-    transactionRepository.remove(transaction);
+    await transactionRepository.remove(transaction);
+
+    return true;
   }
 }
 
