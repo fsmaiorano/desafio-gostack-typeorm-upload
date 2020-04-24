@@ -1,10 +1,8 @@
 import Transaction from '../models/Transaction';
-import Createcategorieservice from '../services/CreateCategoriesService';
 import { getRepository } from 'typeorm';
 import Category from '../models/Category';
 import GetBalanceTransactionService from './GetBalanceTransactionService';
 import AppError from '../errors/AppError';
-import TransactionsRepository from '../repositories/TransactionsRepository';
 
 interface Request {
   title: string;
@@ -29,9 +27,6 @@ class CreateTransactionService {
     await transactionRepository.save(transaction);
 
     transactions.push(transaction);
-
-    const tr = new TransactionsRepository();
-    tr.setBalance(transactions);
 
     return transaction;
   }
