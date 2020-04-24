@@ -6,15 +6,28 @@ import GetBalanceTransactionService from '../services/GetBalanceTransactionServi
 
 @EntityRepository(Transaction)
 class TransactionsRepository extends Repository<Transaction> {
-  private balance: Balance;
-  public async getBalance(): Promise<Balance> {
-    const transactionRepository = new TransactionsRepository();
-    const transactions = await transactionRepository.find();
+  public balance: Balance;
 
-    const getBalanceService = new GetBalanceTransactionService();
-    const balance = getBalanceService.execute(transactions);
+  constructor() {
+    super();
+    this.balance = { income: 0, outcome: 0, total: 0 };
+  }
 
-    return balance;
+  public async getBalance(transactions: Transaction[]): Promise<Balance> {
+    var income = transactions
+      .filter(x => x.type === 'income')
+      .map(y => y.value)
+      .reduce((accumulator: number, current: number) => accumulator + current, 0);
+
+    var outcome = transactions
+      .filter(x => x.type === 'outcome')
+      .map(y => y.value)
+      .reduce((accumulator: number, current: number) => accumulator + current, 0);
+    var total = income - outcome;
+
+    this.balance = new Balance({ income, outcome, total });
+
+    return this.balance;
   }
 }
 

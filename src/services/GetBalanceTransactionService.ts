@@ -1,38 +1,18 @@
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import Transaction from '../models/Transaction';
 import Balance from '../models/Balance';
+import AppError from '../errors/AppError';
 
 class GetBalanceTransactionService {
-  public balance: Balance;
-
-  constructor() {
-    this.balance = { income: 0, outcome: 0, total: 0 };
-  }
-
-  public execute(transactions: Transaction[]): Balance {
+  public async execute(transactions: Transaction[]): Promise<Balance> {
     if (transactions.length === 0) {
-      return this.balance;
+      throw new AppError('Has no transactions');
     }
 
-    var income = transactions
-      .filter(x => x.type === 'income')
-      .map(y => y.value)
-      .reduce((accumulator: number, current: number) => {
-        return accumulator + current;
-      });
+    const transactionsRepository = new TransactionsRepository();
+    const balance = await transactionsRepository.getBalance(transactions);
 
-    var outcome = transactions
-      .filter(x => x.type === 'outcome')
-      .map(y => y.value)
-      .reduce((accumulator: number, current: number) => {
-        return accumulator + current;
-      });
-
-    var total = income - outcome;
-
-    this.balance = new Balance({ income, outcome, total });
-
-    return this.balance;
+    return balance;
   }
 }
 
