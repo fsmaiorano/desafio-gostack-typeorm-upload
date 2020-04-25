@@ -40,7 +40,6 @@ transactionsRouter.post('/', async (request, response) => {
 });
 
 transactionsRouter.delete('/:id', async (request, response) => {
-  console.log(request);
   const { id } = request.params;
 
   const deleteTransactionService = new DeleteTransactionService();
